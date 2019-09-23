@@ -2,10 +2,14 @@ package com.sportsapi.sportsapi.control;
 
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
+//TODO refactor to properties
+
+@Component
 public class Config {
 
     public static String RAPID_API_URL_PREFIX = "x-rapidapi-url-prefix";
