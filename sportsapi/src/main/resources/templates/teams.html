@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Teams</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Teams</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Logo</th>
+			<th>Name</th>
+			<th>Founded</th>
+			<th>Venue</th>
+			<th>Venue Capacity</th>
+			<th>League</th>
+			<th>Country</th>
+			<th>Players</th>
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="team : ${teams}">
+			<td><img style="width: 50px" th:src="${team.logo}"></img></td>
+			<td th:text="${team.name}"></td>
+			<td th:text="${team.founded}"></td>
+			<td><a th:href="${'https://www.google.com/maps/search/' + team.venueName +','+ team.venueCity}" th:text="${team.venueName + ', ' + team.venueCity}"/></td>
+			<td th:text="${team.venueCapacity}"></td>
+			<td><img style="width: 50px" th:src="${team.getLeague().getLogo()}"></img></td>
+			<td><img style="width: 50px" th:src="${team.getLeague().getCountry().getFlag()}"></img></td>
+			<td><a th:href="${'../players/' + team.teamId}" th:text="Players"/></td>
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>

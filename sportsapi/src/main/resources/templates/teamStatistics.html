@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Team Statistics</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Team Statistics</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Logo</th>
+			<th>Name</th>
+			<th>Games Played</th>
+			<th>Wins</th>
+			<th>Draws</th>
+			<th>Losses</th>
+			<th>Points</th>
+			<th>Match Form Home (W-D-L)</th>
+			<th>Match Form Away (W-D-L)</th>
+			<th>Goals For</th>
+			<th>Goals Against</th>
+			<th>Goal Form Home (F-A)</th>
+			<th>Goal Form Away (F-A)</th>
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="team : ${teams}">
+			<td><img style="width: 50px" th:src="${team.logo}"></img></td>
+			<td th:text="${team.name}"></td>
+			<td th:text="${team.teamStatistics.winsAway + team.teamStatistics.winsHome + team.teamStatistics.drawsHome + team.teamStatistics.drawsAway + team.teamStatistics.losesAway + team.teamStatistics.losesHome}"></td>
+			<td th:text="${team.teamStatistics.winsAway + team.teamStatistics.winsHome}"></td>
+			<td th:text="${team.teamStatistics.drawsAway + team.teamStatistics.drawsHome}"></td>
+			<td th:text="${team.teamStatistics.losesAway + team.teamStatistics.losesHome}"></td>
+			<td th:text="${team.teamStatistics.points}"></td>
+			<td th:text="${team.teamStatistics.winsHome + '-' + team.teamStatistics.drawsHome + '-' + team.teamStatistics.losesHome}"></td>
+			<td th:text="${team.teamStatistics.winsAway + '-' + team.teamStatistics.drawsAway + '-' + team.teamStatistics.losesAway}"></td>
+			<td th:text="${team.teamStatistics.goalsForAway + team.teamStatistics.goalsForHome}"></td>
+			<td th:text="${team.teamStatistics.goalsAgainstAway + team.teamStatistics.goalsAgainstHome}"></td>
+			<td th:text="${team.teamStatistics.goalsForHome + '-' + team.teamStatistics.goalsForAway}"></td>
+			<td th:text="${team.teamStatistics.goalsAgainstHome + '-' + team.teamStatistics.goalsAgainstAway}"></td>
+
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>

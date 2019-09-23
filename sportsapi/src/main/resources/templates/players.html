@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Players</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Players</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Team</th>
+	        <th>First Name</th>
+	        <th>Last Name</th>
+			<th>Position</th>
+			<th>Age</th>
+			<th>Nationality</th>
+			<th>Birth Country</th>
+			<th>Height</th>
+			<th>Weight</th>
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="player : ${players}">
+			<td><img style="width: 50px" th:src="${player.getTeam().getLogo()}"></img></td>
+	  		<td th:text="${player.firstName}"></td>
+			<td th:text="${player.lastName}"></td>
+			<td th:text="${player.position}"></td>
+			<td th:text="${player.age}"></td>
+			<div th:if="${countryMap.get(player.nationality) == null}">
+				<td th:text="${player.nationality}"/>
+			</div>
+			<div th:unless="${countryMap.get(player.nationality) == null}">
+				<td><img style="width: 50px" th:src="${countryMap.get(player.nationality).getFlag()}"></img></td>
+			</div>
+			<div th:if="${countryMap.get(player.birthCountry) == null}">
+				<td th:text="${player.birthCountry}"/>
+			</div>
+			<div th:unless="${countryMap.get(player.birthCountry) == null}">
+				<td><img style="width: 50px" th:src="${countryMap.get(player.birthCountry).getFlag()}"></img></td>
+			</div>
+			<td th:text="${player.height}"></td>
+			<td th:text="${player.weight}"></td>
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>

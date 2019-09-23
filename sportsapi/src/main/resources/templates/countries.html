@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Countries</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Countries</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Flag</th>
+	        <th>Code</th>
+	        <th>Country</th>
+			<th>Leagues</th>
+			<th>Teams</th>
+			<th>Players(by Nationality)</th>
+
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="country : ${countries}">
+			<td><img style="width: 50px" th:src="${country.flag}"></img></td>
+	  		<td th:text="${country.code}"></td>
+			<td th:text="${country.countryName}"></td>
+			<td><a th:href="${'../leagues/country/' + country.countryId}"><i class="fa fa-trophy text-black-50"></i></a></td>
+			<td><a th:href="${'../teams/country/' + country.countryId}"><i class="fa fa-navicon text-black-50"></i></a></td>
+			<td><a th:href="${'../players/country/' + country.countryId}"><i class="fa fa-group text-black-50"></i></a></td>
+
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>

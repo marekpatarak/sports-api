@@ -1,0 +1,79 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+     <link href="../static/bootstrap-4.2.1-dist/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap-4.2.1-dist/css/bootstrap.css}"/>
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Admin</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Action</th>
+	        <th>Param</th>
+	        <th>Button</th>
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr>
+			<td>Fetch and persist countries</td>
+	  		<td></td>
+			<td><a class="btn btn-primary" href="../fetch/countries" role="button">Fetch</a></td>
+		</tr>
+		<tr>
+			<form id="fetchLeague" action="../fetch/leagues/">
+				<td>Fetch and persist league by ID</td>
+				<td><input class="form-control" type="text" name="leagueId"/></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchTeamsByLeagueId" action="../fetch/teams/">
+				<td>Fetch and persist teams by league ID</td>
+				<td><input class="form-control" type="text" name="leagueId"/></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchPlayersByTeamId" action="../fetch/players/">
+				<td>Fetch and persist players by team ID</td>
+				<td><input class="form-control" type="text" name="teamId"/></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchTeamStatsByTeamId" action="../fetch/teamstatistics/">
+				<td>Fetch and persist team statistics by team ID</td>
+				<td><input class="form-control" type="text" name="teamId"/></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchTeamStatsByLeagueId" action="../fetch/teamstatistics/">
+				<td>Fetch and persist team statistics for all teams by league ID</td>
+				<td><input class="form-control" type="text" name="leagueId"/></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchPlayerStatsByPlayerId" action="../fetch/playerstatistics/">
+				<td>Fetch and persist player statistics by player Id</td>
+				<td><input class="form-control" type="text" name="playerId" /></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+		<tr>
+			<form id="fetchPlayerStatsByTeamId" action="../fetch/playerstatistics/">
+				<td>Fetch and persist player statistics for all players by team Id</td>
+				<td><input class="form-control" type="text" name="teamId" /></td>
+				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+			</form>
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>

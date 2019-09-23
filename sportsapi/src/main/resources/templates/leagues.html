@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Leagues</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+  <h2>Leagues</h2>
+	<div class="container-fluid">
+    	<table class="table table-striped">
+	    <thead>
+	    <tr>
+			<th>Logo</th>
+	        <th>Name</th>
+	        <th>Season</th>
+			<th>Season Start</th>
+			<th>Season End</th>
+			<th>Country</th>
+			<th>Team Profiles</th>
+			<th>Team Statistics</th>
+
+		</tr>
+	    </thead>
+	    <tbody>
+	    <tr th:each="league : ${leagues}">
+			<td><img style="width: 50px" th:src="${league.logo}"></img></td>
+	  		<td th:text="${league.name}"></td>
+			<td th:text="${league.season}"></td>
+			<td th:text="${league.seasonStart}"></td>
+			<td th:text="${league.seasonEnd}"></td>
+			<td><img style="width: 50px" th:src="${league.getCountry().getFlag()}"></img></td>
+			<td><a th:href="${'../teams/' + league.leagueId}" th:text="Profiles"/></td>
+			<td><a th:href="${'../teams/statistics/' + league.leagueId}" th:text="Statistics"/></td>
+
+		</tr>
+	    </tbody>
+	</table>
+</div>
+</body>
+</html>
