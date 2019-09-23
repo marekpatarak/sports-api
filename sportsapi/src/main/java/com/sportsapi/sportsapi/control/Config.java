@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.HashMap;
 import java.util.Map;
 
-@Configuration
 public class Config {
 
     public static String RAPID_API_URL_PREFIX = "x-rapidapi-url-prefix";
