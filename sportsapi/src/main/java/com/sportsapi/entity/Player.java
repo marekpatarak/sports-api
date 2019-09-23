@@ -1,4 +1,4 @@
-package com.sportsapi.sportsapi.entity;
+package com.sportsapi.entity;
 
 import lombok.Getter;
 import lombok.Setter;

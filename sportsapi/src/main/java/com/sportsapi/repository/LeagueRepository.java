@@ -1,6 +1,6 @@
-package com.sportsapi.sportsapi.repository;
+package com.sportsapi.repository;
 
-import com.sportsapi.sportsapi.entity.League;
+import com.sportsapi.entity.League;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

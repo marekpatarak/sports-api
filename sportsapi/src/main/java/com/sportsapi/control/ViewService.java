@@ -1,10 +1,10 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
-import com.sportsapi.sportsapi.entity.Country;
-import com.sportsapi.sportsapi.entity.League;
-import com.sportsapi.sportsapi.entity.Player;
-import com.sportsapi.sportsapi.entity.Team;
-import com.sportsapi.sportsapi.repository.*;
+import com.sportsapi.entity.Country;
+import com.sportsapi.entity.League;
+import com.sportsapi.entity.Player;
+import com.sportsapi.entity.Team;
+import com.sportsapi.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service

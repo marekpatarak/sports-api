@@ -1,7 +1,6 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

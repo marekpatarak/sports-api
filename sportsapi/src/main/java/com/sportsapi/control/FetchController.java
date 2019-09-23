@@ -1,7 +1,7 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
-import com.sportsapi.sportsapi.entity.Player;
-import com.sportsapi.sportsapi.entity.Team;
+import com.sportsapi.entity.Player;
+import com.sportsapi.entity.Team;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

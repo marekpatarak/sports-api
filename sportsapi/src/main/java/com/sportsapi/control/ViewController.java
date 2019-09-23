@@ -1,12 +1,12 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
-import com.sportsapi.sportsapi.entity.Country;
-import com.sportsapi.sportsapi.entity.League;
-import com.sportsapi.sportsapi.entity.Player;
-import com.sportsapi.sportsapi.entity.Team;
-import com.sportsapi.sportsapi.repository.CountryRepository;
-import com.sportsapi.sportsapi.repository.LeagueRepository;
-import com.sportsapi.sportsapi.repository.TeamsRepository;
+import com.sportsapi.entity.Country;
+import com.sportsapi.entity.League;
+import com.sportsapi.entity.Player;
+import com.sportsapi.entity.Team;
+import com.sportsapi.repository.CountryRepository;
+import com.sportsapi.repository.LeagueRepository;
+import com.sportsapi.repository.TeamsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

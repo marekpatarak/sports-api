@@ -1,4 +1,4 @@
-package com.sportsapi.sportsapi.auth;
+package com.sportsapi.auth;
 
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

@@ -1,7 +1,7 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
-import com.sportsapi.sportsapi.entity.*;
-import com.sportsapi.sportsapi.repository.*;
+import com.sportsapi.entity.*;
+import com.sportsapi.repository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

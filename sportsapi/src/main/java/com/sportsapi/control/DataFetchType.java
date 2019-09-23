@@ -1,4 +1,4 @@
-package com.sportsapi.sportsapi.control;
+package com.sportsapi.control;
 
 public enum DataFetchType {
 
