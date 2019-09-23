@@ -1,4 +1,4 @@
-package com.sportsapi.sportsapi;
+package com.sportsapi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
