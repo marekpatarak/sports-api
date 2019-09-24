@@ -5,6 +5,7 @@ import com.sportsapi.repository.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -18,8 +19,26 @@ import java.util.logging.Logger;
 @Service
 public class FetchService {
 
-    @Autowired
-    private Config config;
+//    @Autowired
+//    private Config config;
+
+    @Value("${RAPID_API_URL_PREFIX}")
+    private String rapidApiUrlPrefix;
+
+    @Value("${RAPID_API_HOST}")
+    private String rapidApiHost;
+
+    @Value("${RAPID_API_KEY}")
+    private String rapidApiKey;
+
+    @Value("${SEASON}")
+    private String season;
+
+    @Value("${FETCH_SERVICE_ENABLED}")
+    private String fetchServiceEnabled;
+
+    private final String RAPID_API_HOST_HEADER_KEY = "x-rapidapi-host";
+    private final String RAPID_API_KEY_HEADER_KEY = "x-rapidapi-key";
 
     @Autowired
     private CountryRepository countryRepository;
@@ -43,7 +62,7 @@ public class FetchService {
 
     public void fetchData(DataFetchType dataFetchType, String param) {
 
-        if(Boolean.valueOf(config.getProperty(Config.FETCH_SERVICE_ENABLED))) {
+        if(Boolean.valueOf(fetchServiceEnabled)) {
 
 
             JSONObject jsonObject = fetchJSONObject(dataFetchType, param);
@@ -131,7 +150,7 @@ public class FetchService {
 
     private String prepareUrl(DataFetchType dataFetchType, String param) {
 
-        String url = config.getProperty(Config.RAPID_API_URL_PREFIX) + dataFetchType.getFetchType();
+        String url = rapidApiUrlPrefix + dataFetchType.getFetchType();
 
         switch(dataFetchType) {
             case COUNTRIES:
@@ -142,7 +161,7 @@ public class FetchService {
                 break;
             case PLAYERS:
             case PLAYERSTATISTICS:
-                url += dataFetchType.getUrlSuffix() + param + "/" + config.getProperty(Config.SEASON_2019);
+                url += dataFetchType.getUrlSuffix() + param + "/" + season;
                 break;
             case TEAMSTATISTICS:
                 Integer leagueId = teamsRepository.findById(Integer.parseInt(param)).get().getLeague().getLeagueId();
@@ -162,8 +181,8 @@ public class FetchService {
             URL objUrl = new URL(url);
             HttpURLConnection con = (HttpURLConnection) objUrl.openConnection();
             con.setRequestMethod("GET");
-            con.setRequestProperty(Config.RAPID_API_HOST, config.getProperty(Config.RAPID_API_HOST));
-            con.setRequestProperty(Config.RAPID_API_KEY, config.getProperty(Config.RAPID_API_KEY));
+            con.setRequestProperty(RAPID_API_HOST_HEADER_KEY, rapidApiHost);
+            con.setRequestProperty(RAPID_API_KEY_HEADER_KEY, rapidApiKey);
 
             if(con.getResponseCode() == 200) {
                 BufferedReader buffer = new BufferedReader(new InputStreamReader(con.getInputStream()));
