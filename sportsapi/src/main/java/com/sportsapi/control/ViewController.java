@@ -1,19 +1,21 @@
 package com.sportsapi.control;
 
-import com.sportsapi.entity.Country;
-import com.sportsapi.entity.League;
-import com.sportsapi.entity.Player;
-import com.sportsapi.entity.Team;
+import com.sportsapi.auth.registration.EmailExistsException;
+import com.sportsapi.auth.registration.UserDto;
+import com.sportsapi.entity.*;
 import com.sportsapi.repository.CountryRepository;
 import com.sportsapi.repository.LeagueRepository;
 import com.sportsapi.repository.TeamsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,9 @@ public class ViewController {
 
     @Autowired
     ViewService viewService;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     CountryRepository countryRepository;
@@ -143,8 +148,41 @@ public class ViewController {
         return "admin";
     }
 
+    @RequestMapping(value = "/user/registration", method = RequestMethod.GET)
+    public String showRegistrationForm(WebRequest request, Model model) {
+        UserDto userDto = new UserDto();
+        model.addAttribute("user", userDto);
+        return "registration";
+    }
 
 
+    @PostMapping(path = "/user/registration")
+    public ModelAndView registerUserAccount
+            (@ModelAttribute("user") @Valid UserDto accountDto,
+             BindingResult result, WebRequest request, Errors errors) {
+        User registered = new User();
+        if (!result.hasErrors()) {
+            registered = createUserAccount(accountDto, result);
+        }
+        if (registered == null) {
+            result.rejectValue("email", "message.regError");
+        }
+        if (result.hasErrors()) {
+            return new ModelAndView("registration", "user", accountDto);
+        }
+        else {
+            return new ModelAndView("success", "user", accountDto);
+        }
+    }
 
+    private User createUserAccount(UserDto accountDto, BindingResult result) {
+        User registered = null;
+        try {
+            registered = userService.registerNewUserAccount(accountDto);
+        } catch (EmailExistsException e) {
+            return null;
+        }
+        return registered;
+    }
 
 }
