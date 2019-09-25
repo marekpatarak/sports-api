@@ -33,21 +33,24 @@ public class League {
     @OneToMany(mappedBy = "league")
     private List<Team> teams;
 
+    private String xmlFeedUrl;
+
     public League() {
 
     }
+
     @Override
     public String toString() {
         return "League{" +
                 "leagueId=" + leagueId +
                 ", name='" + name + '\'' +
-                ", country=" + country.getCountryName() +
                 ", season=" + season +
                 ", seasonStart='" + seasonStart + '\'' +
                 ", seasonEnd='" + seasonEnd + '\'' +
                 ", logo='" + logo + '\'' +
                 ", standings=" + standings +
                 ", isCurrent=" + isCurrent +
+                ", xmlFeedUrl='" + xmlFeedUrl + '\'' +
                 '}';
     }
 
@@ -72,4 +75,5 @@ public class League {
         }
         return null;
     }
+
 }
