@@ -3,12 +3,16 @@
 <head>
     <title>Admin</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-     <link href="../static/bootstrap-4.2.1-dist/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap-4.2.1-dist/css/bootstrap.css}"/>
+	<link href="../static/bootstrap-4.2.1-dist/css/bootstrap.css" rel="stylesheet" th:href="@{/bootstrap-4.2.1-dist/css/bootstrap.css}"/>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"/>
+	<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 </head>
 <body>
 <header th:insert="../fragments/header.html"></header>
   <h2>Admin</h2>
 	<div class="container-fluid">
+		<h3>JSON</h3>
     	<table class="table table-striped">
 	    <thead>
 	    <tr>
@@ -18,55 +22,60 @@
 		</tr>
 	    </thead>
 	    <tbody>
+		<tr>
+			<td>JSON Fetch service toggle</td>
+			<td></td>
+			<td><input id="json-fetch-toggle" type="checkbox" data-toggle="toggle"></td>
+		</tr>
 	    <tr>
 			<td>Fetch and persist countries</td>
 	  		<td></td>
-			<td><a class="btn btn-primary" href="../fetch/countries" role="button">Fetch</a></td>
+			<td><a class="btn btn-primary" href="../jsonfetch/countries" role="button">Fetch</a></td>
 		</tr>
 		<tr>
-			<form id="fetchLeague" action="../fetch/leagues/">
+			<form id="fetchLeague" action="../jsonfetch/leagues/">
 				<td>Fetch and persist league by ID</td>
 				<td><input class="form-control" type="text" name="leagueId"/></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchTeamsByLeagueId" action="../fetch/teams/">
+			<form id="fetchTeamsByLeagueId" action="../jsonfetch/teams/">
 				<td>Fetch and persist teams by league ID</td>
 				<td><input class="form-control" type="text" name="leagueId"/></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchPlayersByTeamId" action="../fetch/players/">
+			<form id="fetchPlayersByTeamId" action="../jsonfetch/players/">
 				<td>Fetch and persist players by team ID</td>
 				<td><input class="form-control" type="text" name="teamId"/></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchTeamStatsByTeamId" action="../fetch/teamstatistics/">
+			<form id="fetchTeamStatsByTeamId" action="../jsonfetch/teamstatistics/">
 				<td>Fetch and persist team statistics by team ID</td>
 				<td><input class="form-control" type="text" name="teamId"/></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchTeamStatsByLeagueId" action="../fetch/teamstatistics/">
+			<form id="fetchTeamStatsByLeagueId" action="../jsonfetch/teamstatistics/">
 				<td>Fetch and persist team statistics for all teams by league ID</td>
 				<td><input class="form-control" type="text" name="leagueId"/></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchPlayerStatsByPlayerId" action="../fetch/playerstatistics/">
+			<form id="fetchPlayerStatsByPlayerId" action="../jsonfetch/playerstatistics/">
 				<td>Fetch and persist player statistics by player Id</td>
 				<td><input class="form-control" type="text" name="playerId" /></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
 			</form>
 		</tr>
 		<tr>
-			<form id="fetchPlayerStatsByTeamId" action="../fetch/playerstatistics/">
+			<form id="fetchPlayerStatsByTeamId" action="../jsonfetch/playerstatistics/">
 				<td>Fetch and persist player statistics for all players by team Id</td>
 				<td><input class="form-control" type="text" name="teamId" /></td>
 				<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
@@ -74,6 +83,77 @@
 		</tr>
 	    </tbody>
 	</table>
+		<h3>XML</h3>
+		<table class="table table-striped">
+			<thead>
+			<tr>
+				<th>Action</th>
+				<th>Param</th>
+				<th>Button</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr>
+				<td>XML Fetch service toggle</td>
+				<td></td>
+				<td><input id="xml-fetch-toggle" type="checkbox" data-toggle="toggle"></td>
+			</tr>
+			<tr>
+				<form id="fetchXmlArticleStubsLeague" action="../xmlfetch/league/">
+					<td>Fetch and persist XmlArticleStubs for league ID</td>
+					<td><input class="form-control" type="text" name="param"/></td>
+					<td><input class="btn btn-primary" type="submit" value="Fetch"/></td>
+				</form>
+			</tr>
+			<tr>
+				<td>Fetch and persist XmlArticleStubs for all leagues</td>
+				<td></td>
+				<td><a class="btn btn-primary" href="../xmlfetch/league/?param=all" role="button">Fetch</a></td>
+			</tr>
+
+			</tbody>
+		</table>
 </div>
 </body>
+<script>
+    $('#json-fetch-toggle').bootstrapToggle();
+    $('#xml-fetch-toggle').bootstrapToggle();
+    $('#json-fetch-toggle').bootstrapToggle("[[${jsonFetchServiceEnabled ? 'on' : 'off'}]]");
+    $('#xml-fetch-toggle').bootstrapToggle("[[${xmlFetchServiceEnabled ? 'on' : 'off'}]]");
+
+    $(function() {
+        $('#json-fetch-toggle').change(function() {
+            $.ajax({
+                method: "get",
+                url: "/jsonfetch/servicetoggle",
+            })
+                .done(function( msg ) {
+                    alert( "JSON fetch service toggle successful");
+                });
+        }),
+
+        $('#xml-fetch-toggle').change(function() {
+            $.ajax({
+                method: "get",
+                url: "/xmlfetch/servicetoggle",
+            })
+                .done(function( msg ) {
+                    alert( "XML fetch service toggle successful");
+                });
+        })
+
+    })
+
+    // $(function() {
+    //     $('#xml-fetch-toggle').change(function() {
+    //         $.ajax({
+    //             method: "get",
+    //             url: "/xmlfetch/servicetoggle",
+    //         })
+    //             .done(function( msg ) {
+    //                 alert( "XML fetch service toggle successful");
+    //             });
+    //     })
+    // })
+</script>
 </html>

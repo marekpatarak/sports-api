@@ -2,7 +2,7 @@ package com.sportsapi.control;
 
 import com.sportsapi.entity.Player;
 import com.sportsapi.entity.Team;
-import com.sportsapi.service.FetchService;
+import com.sportsapi.service.JsonFetchService;
 import com.sportsapi.service.ViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(path="/jsonfetch")
-public class FetchController {
+public class JsonFetchController {
 
     @Autowired
-    FetchService fetchService;
+    JsonFetchService jsonFetchService;
 
     @Autowired
     ViewService viewService;
@@ -24,7 +24,7 @@ public class FetchController {
     @GetMapping(path="/countries")
     public String fetchCountries() {
 
-        fetchService.fetchData(DataFetchType.COUNTRIES,"");
+        jsonFetchService.fetchData(DataFetchType.COUNTRIES,"");
 
         return "success";
     }
@@ -33,7 +33,7 @@ public class FetchController {
     @ResponseBody
     public String fetchLeague(@RequestParam("leagueId") String leagueId) {
 
-        fetchService.fetchData(DataFetchType.LEAGUES, leagueId);
+        jsonFetchService.fetchData(DataFetchType.LEAGUES, leagueId);
 
         return "success";
     }
@@ -43,7 +43,7 @@ public class FetchController {
     @ResponseBody
     public String fetchTeamsByLeague(@RequestParam("leagueId") String leagueId) {
 
-        fetchService.fetchData(DataFetchType.TEAMS, leagueId);
+        jsonFetchService.fetchData(DataFetchType.TEAMS, leagueId);
 
         return "success";
     }
@@ -52,7 +52,7 @@ public class FetchController {
     @ResponseBody
     public String fetchPlayersByTeam(@RequestParam("teamId") String teamId) {
 
-        fetchService.fetchData(DataFetchType.PLAYERS, teamId);
+        jsonFetchService.fetchData(DataFetchType.PLAYERS, teamId);
 
         return "success";
     }
@@ -63,13 +63,13 @@ public class FetchController {
 
         if (allParams.get("teamId") != null) {
 
-            fetchService.fetchData(DataFetchType.TEAMSTATISTICS, allParams.get("teamId"));
+            jsonFetchService.fetchData(DataFetchType.TEAMSTATISTICS, allParams.get("teamId"));
 
         } else if (allParams.get("leagueId") != null) {
             List<Team> teams = viewService.getTeamsByLeague(allParams.get("leagueId"));
 
             teams.stream().forEach(x-> {
-                fetchService.fetchData(DataFetchType.TEAMSTATISTICS, String.valueOf(x.getTeamId()));
+                jsonFetchService.fetchData(DataFetchType.TEAMSTATISTICS, String.valueOf(x.getTeamId()));
 
             });
         }
@@ -83,19 +83,27 @@ public class FetchController {
     public String fetchPlayerStatistics(@RequestParam Map<String,String> allParams) {
 
         if (allParams.get("playerId") != null) {
-            fetchService.fetchData(DataFetchType.PLAYERSTATISTICS, allParams.get("playerId"));
+            jsonFetchService.fetchData(DataFetchType.PLAYERSTATISTICS, allParams.get("playerId"));
 
         } else if (allParams.get("teamId") != null) {
             List<Player> players = viewService.getPlayersByTeam(allParams.get("teamId"));
 
             players.stream().forEach(x-> {
-                fetchService.fetchData(DataFetchType.PLAYERSTATISTICS, String.valueOf(x.getPlayerId()));
+                jsonFetchService.fetchData(DataFetchType.PLAYERSTATISTICS, String.valueOf(x.getPlayerId()));
 
             });
         }
 
 
         return "success";
+    }
+
+    @GetMapping(path="/servicetoggle")
+    public String toggleJsonFetchService() {
+
+        jsonFetchService.toggleJsonFetchServiceEnabled();
+
+        return "togglesuccess";
     }
 
 }

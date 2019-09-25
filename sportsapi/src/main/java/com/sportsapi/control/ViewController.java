@@ -6,8 +6,11 @@ import com.sportsapi.entity.*;
 import com.sportsapi.repository.CountryRepository;
 import com.sportsapi.repository.LeagueRepository;
 import com.sportsapi.repository.TeamsRepository;
+import com.sportsapi.service.JsonFetchService;
 import com.sportsapi.service.UserService;
 import com.sportsapi.service.ViewService;
+import com.sportsapi.service.XmlFetchService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +35,12 @@ public class ViewController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    JsonFetchService jsonFetchService;
+
+    @Autowired
+    XmlFetchService xmlFetchService;
 
     @Autowired
     CountryRepository countryRepository;
@@ -146,7 +155,10 @@ public class ViewController {
     }
 
     @GetMapping(path="/admin")
-    public String getAdminPage() {
+    public String getAdminPage(Model model) {
+
+        model.addAttribute("jsonFetchServiceEnabled", jsonFetchService.getJsonFetchServiceEnabled());
+        model.addAttribute("xmlFetchServiceEnabled", xmlFetchService.getXmlFetchServiceEnabled());
 
         return "admin";
     }

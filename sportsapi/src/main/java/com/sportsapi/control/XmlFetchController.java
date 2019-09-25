@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping(path="/xmlfetch")
@@ -22,8 +23,8 @@ public class XmlFetchController {
     @Autowired
     LeagueRepository leagueRepository;
 
-    @GetMapping(path = "/league/{param}")
-    public String fetchXmlArticleStubs(@PathVariable("param") String param) {
+    @GetMapping(path = "/league/")
+    public String fetchXmlArticleStubs(@RequestParam("param") String param) {
 
         if(param.equals("all")) {
             leagueRepository.findAll().forEach(x -> xmlFetchService.fetchXmlArticleStubsByLeagueId(String.valueOf(x.getLeagueId())));
@@ -32,6 +33,14 @@ public class XmlFetchController {
         }
 
         return "success";
+    }
+
+    @GetMapping(path="/servicetoggle")
+    public String toggleXmlFetchServiceEnabled() {
+
+        xmlFetchService.toggleXmlFetchServiceEnabled();
+
+        return "togglesuccess";
     }
 
 }

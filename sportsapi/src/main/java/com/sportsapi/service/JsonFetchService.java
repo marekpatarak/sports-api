@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
-public class FetchService {
+public class JsonFetchService {
 
 //    @Autowired
 //    private Config config;
@@ -35,8 +35,8 @@ public class FetchService {
     @Value("${SEASON}")
     private String season;
 
-    @Value("${FETCH_SERVICE_ENABLED}")
-    private String fetchServiceEnabled;
+    @Value("${JSON_FETCH_SERVICE_ENABLED}")
+    private String jsonFetchServiceEnabled;
 
     private final String RAPID_API_HOST_HEADER_KEY = "x-rapidapi-host";
     private final String RAPID_API_KEY_HEADER_KEY = "x-rapidapi-key";
@@ -59,11 +59,27 @@ public class FetchService {
     @Autowired
     private PlayerStatisticsRepository playerStatisticsRepository;
 
-    private static Logger logger = Logger.getLogger(FetchService.class.getCanonicalName());
+    private static Logger logger = Logger.getLogger(JsonFetchService.class.getCanonicalName());
+
+    public void toggleJsonFetchServiceEnabled(){
+        if (Boolean.valueOf(jsonFetchServiceEnabled)) {
+            setJsonFetchServiceEnabled("false");
+        } else {
+            setJsonFetchServiceEnabled("true");
+        }
+    }
+
+    private void setJsonFetchServiceEnabled(String fetchServiceEnabled) {
+        this.jsonFetchServiceEnabled = fetchServiceEnabled;
+    }
+
+    public Boolean getJsonFetchServiceEnabled() {
+        return Boolean.valueOf(jsonFetchServiceEnabled);
+    }
 
     public void fetchData(DataFetchType dataFetchType, String param) {
 
-        if(Boolean.valueOf(fetchServiceEnabled)) {
+        if(Boolean.valueOf(jsonFetchServiceEnabled)) {
 
 
             JSONObject jsonObject = fetchJSONObject(dataFetchType, param);
