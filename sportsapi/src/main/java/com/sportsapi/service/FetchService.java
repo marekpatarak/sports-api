@@ -1,5 +1,6 @@
-package com.sportsapi.control;
+package com.sportsapi.service;
 
+import com.sportsapi.control.DataFetchType;
 import com.sportsapi.entity.*;
 import com.sportsapi.repository.*;
 import org.json.JSONArray;

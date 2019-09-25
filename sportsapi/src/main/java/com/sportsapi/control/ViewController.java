@@ -6,6 +6,8 @@ import com.sportsapi.entity.*;
 import com.sportsapi.repository.CountryRepository;
 import com.sportsapi.repository.LeagueRepository;
 import com.sportsapi.repository.TeamsRepository;
+import com.sportsapi.service.UserService;
+import com.sportsapi.service.ViewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

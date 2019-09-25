@@ -1,4 +1,4 @@
-package com.sportsapi.control;
+package com.sportsapi.service;
 
 import com.sportsapi.auth.registration.EmailExistsException;
 import com.sportsapi.auth.registration.UserDto;

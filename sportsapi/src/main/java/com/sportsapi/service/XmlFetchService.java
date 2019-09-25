@@ -1,4 +1,4 @@
-package com.sportsapi.control;
+package com.sportsapi.service;
 
 import com.sportsapi.entity.League;
 import com.sportsapi.entity.XmlArticleStub;
