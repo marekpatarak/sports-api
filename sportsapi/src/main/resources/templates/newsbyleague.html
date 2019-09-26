@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${league.getName() + ' News'}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+<h2 th:text="${league.getName() + ' News'}"></h2>
+<div class="container-fluid">
+	<div class="card">
+		<ul class="list-group list-group-flush">
+			<a th:each="article : ${xmlArticleStubList}" th:href="${article.getLink()}"><li th:text="${article.getTitle()}" class="list-group-item"></li></a>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

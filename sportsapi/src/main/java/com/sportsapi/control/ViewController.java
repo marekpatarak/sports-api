@@ -6,6 +6,7 @@ import com.sportsapi.entity.*;
 import com.sportsapi.repository.CountryRepository;
 import com.sportsapi.repository.LeagueRepository;
 import com.sportsapi.repository.TeamsRepository;
+import com.sportsapi.repository.XmlArticleStubRepository;
 import com.sportsapi.service.JsonFetchService;
 import com.sportsapi.service.UserService;
 import com.sportsapi.service.ViewService;
@@ -22,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +52,9 @@ public class ViewController {
 
     @Autowired
     LeagueRepository leagueRepository;
+
+    @Autowired
+    XmlArticleStubRepository xmlArticleStubRepository;
 
 
     @GetMapping(path="/")
@@ -162,6 +167,31 @@ public class ViewController {
 
         return "admin";
     }
+
+    @GetMapping(path="/news")
+    public String getNewsPage(Model model) {
+
+        List<League> leagues = (List<League>)leagueRepository.findAll();
+        Map<League,List<XmlArticleStub>> xmlArticleStubMapByLeague = new HashMap<>();
+
+        leagues.stream().forEach(x -> xmlArticleStubMapByLeague.put(x,xmlArticleStubRepository.findByLeagueId(x.getLeagueId())));
+        model.addAttribute("xmlArticleStubMapByLeague", xmlArticleStubMapByLeague);
+
+        return "news";
+    }
+
+    @GetMapping(path="/news/{leagueId}")
+    public String getNewsPageByLeague(@PathVariable("leagueId") String leagueId, Model model) {
+
+        League league = leagueRepository.findById(Integer.parseInt(leagueId)).get();
+        List<XmlArticleStub> xmlArticleStubList = xmlArticleStubRepository.findByLeagueId(Integer.parseInt(leagueId));
+
+        model.addAttribute("league",league);
+        model.addAttribute("xmlArticleStubList", xmlArticleStubList);
+
+        return "newsbyleague";
+    }
+
 
     @RequestMapping(value = "/user/registration", method = RequestMethod.GET)
     public String showRegistrationForm(WebRequest request, Model model) {

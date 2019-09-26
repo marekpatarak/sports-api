@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>RSS News</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<header th:insert="../fragments/header.html"></header>
+<h2>All News</h2>
+<div class="container-fluid">
+	<div th:each="entry : ${xmlArticleStubMapByLeague.entrySet()}" class="card">
+		<h4 class="card-header" th:text="${entry.getKey().getName()}" />
+		<ul class="list-group list-group-flush">
+			<a th:href="${entry.getValue().get(0).getLink()}"><li th:text="${entry.getValue().get(0).getTitle()}" class="list-group-item"></li></a>
+			<a th:href="${entry.getValue().get(1).getLink()}"><li th:text="${entry.getValue().get(1).getTitle()}" class="list-group-item"></li></a>
+			<a th:href="${entry.getValue().get(2).getLink()}"><li th:text="${entry.getValue().get(2).getTitle()}" class="list-group-item"></li></a>
+			<li class="list-group-item"><a th:href="${'../news/' + entry.getKey().getLeagueId()}">More news</a></li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
