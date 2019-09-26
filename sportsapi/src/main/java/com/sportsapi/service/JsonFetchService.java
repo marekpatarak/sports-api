@@ -3,6 +3,7 @@ package com.sportsapi.service;
 import com.sportsapi.control.DataFetchType;
 import com.sportsapi.entity.*;
 import com.sportsapi.repository.*;
+import lombok.extern.java.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Service
+@Log
 public class JsonFetchService {
-
-//    @Autowired
-//    private Config config;
 
     @Value("${RAPID_API_URL_PREFIX}")
     private String rapidApiUrlPrefix;
@@ -59,8 +58,6 @@ public class JsonFetchService {
     @Autowired
     private PlayerStatisticsRepository playerStatisticsRepository;
 
-    private static Logger logger = Logger.getLogger(JsonFetchService.class.getCanonicalName());
-
     public void toggleJsonFetchServiceEnabled(){
         if (Boolean.valueOf(jsonFetchServiceEnabled)) {
             setJsonFetchServiceEnabled("false");
@@ -77,92 +74,86 @@ public class JsonFetchService {
         return Boolean.valueOf(jsonFetchServiceEnabled);
     }
 
-    public void fetchData(DataFetchType dataFetchType, String param) {
+    public void fetchJsonData(DataFetchType dataFetchType, String param) {
 
-        if(Boolean.valueOf(jsonFetchServiceEnabled)) {
+        JSONObject jsonObject = fetchJSONObject(dataFetchType, param);
 
+        if(dataFetchType != DataFetchType.TEAMSTATISTICS) {
 
-            JSONObject jsonObject = fetchJSONObject(dataFetchType, param);
+            JSONArray jsonArray = jsonObject.getJSONObject("api").getJSONArray(dataFetchType.getFetchType());
 
-            if(dataFetchType != DataFetchType.TEAMSTATISTICS) {
+            for (Object arrayObject : jsonArray) {
+                JSONObject entityObject = (JSONObject) arrayObject;
 
-                JSONArray jsonArray = jsonObject.getJSONObject("api").getJSONArray(dataFetchType.getFetchType());
+                switch (dataFetchType) {
 
-                for (Object arrayObject : jsonArray) {
-                    JSONObject entityObject = (JSONObject) arrayObject;
+                    case COUNTRIES:
+                        Country country = Country.getCountryFromJsonObject(entityObject);
+                        countryRepository.save(country);
+                        log.log(Level.INFO, "Country " + country.getCountryName() + " saved");
+                        break;
 
-                    switch (dataFetchType) {
+                    case LEAGUES:
+                        League league = League.getLeagueFromJsonObject(entityObject);
+                        Country leagueCountry = countryRepository.findCountryByCountryNameEquals(league.getCountry().getCountryName());
 
-                        case COUNTRIES:
-                            Country country = Country.getCountryFromJsonObject(entityObject);
-                            countryRepository.save(country);
-                            logger.log(Level.INFO, "Country " + country.getCountryName() + " saved");
-                            break;
+                        if (leagueCountry != null) {
+                            league.setCountry(leagueCountry);
+                        } else {
+                            countryRepository.save(league.getCountry());
+                        }
 
-                        case LEAGUES:
-                            League league = League.getLeagueFromJsonObject(entityObject);
-                            Country leagueCountry = countryRepository.findCountryByCountryNameEquals(league.getCountry().getCountryName());
+                        leagueRepository.save(league);
+                        log.log(Level.INFO, league.toString() + " saved");
+                        break;
 
-                            if (leagueCountry != null) {
-                                league.setCountry(leagueCountry);
-                            } else {
-                                countryRepository.save(league.getCountry());
-                            }
+                    case TEAMS:
+                        Team team = Team.getTeamFromJsonObject(entityObject);
+                        League teamLeague = leagueRepository.findById(Integer.parseInt(param)).get();
 
-                            leagueRepository.save(league);
-                            logger.log(Level.INFO, league.toString() + " saved");
-                            break;
+                        if (teamLeague != null) {
+                            team.setLeague(teamLeague);
+                        } else {
+                            leagueRepository.save(teamLeague);
+                        }
 
-                        case TEAMS:
-                            Team team = Team.getTeamFromJsonObject(entityObject);
-                            League teamLeague = leagueRepository.findById(Integer.parseInt(param)).get();
+                        teamsRepository.save(team);
+                        log.log(Level.INFO, team.toString() + " saved");
 
-                            if (teamLeague != null) {
-                                team.setLeague(teamLeague);
-                            } else {
-                                leagueRepository.save(teamLeague);
-                            }
+                        break;
 
-                            teamsRepository.save(team);
-                            logger.log(Level.INFO, team.toString() + " saved");
+                    case PLAYERS:
+                        Team playerTeam = teamsRepository.findById(Integer.parseInt(param)).get();
+                        Player player = Player.getPlayerFromJsonObject(entityObject);
 
-                            break;
+                        if (playerTeam != null) {
+                            player.setTeam(playerTeam);
+                        }
 
-                        case PLAYERS:
-                            Team playerTeam = teamsRepository.findById(Integer.parseInt(param)).get();
-                            Player player = Player.getPlayerFromJsonObject(entityObject);
+                        playerRepository.save(player);
+                        break;
 
-                            if (playerTeam != null) {
-                                player.setTeam(playerTeam);
-                            }
-
-                            playerRepository.save(player);
-                            break;
-
-                        case PLAYERSTATISTICS:
-                            Player player1 = playerRepository.findById(Integer.parseInt(param)).get();
-                            if (player1.getTeam().getLeague().getName().equals((String)entityObject.get("league"))) {
-                                PlayerStatistics playerStatistics = PlayerStatistics.getPlayerStatisticsFromJsonObject(entityObject);
-                                playerStatistics.setPlayer(player1);
-                                playerStatisticsRepository.save(playerStatistics);
-                            }
-                            break;
-
-                    }
+                    case PLAYERSTATISTICS:
+                        Player player1 = playerRepository.findById(Integer.parseInt(param)).get();
+                        if (player1.getTeam().getLeague().getName().equals((String)entityObject.get("league"))) {
+                            PlayerStatistics playerStatistics = PlayerStatistics.getPlayerStatisticsFromJsonObject(entityObject);
+                            playerStatistics.setPlayer(player1);
+                            playerStatisticsRepository.save(playerStatistics);
+                        }
+                        break;
 
                 }
-            } else {
-                TeamStatistics teamStatistics = TeamStatistics.getTeamStatisticsFromJsonObject(jsonObject.getJSONObject("api").getJSONObject(dataFetchType.getFetchType()));
-                Team team = teamsRepository.findById(Integer.parseInt(param)).get();
-                teamStatistics.setTeam(team);
-                teamStatisticsRepository.save(teamStatistics);
+
             }
-
-            logger.log(Level.INFO,"Fetch of data *" + dataFetchType.getFetchType() + "* finished");
         } else {
-            logger.log(Level.INFO,"Fetch service disabled");
-
+            TeamStatistics teamStatistics = TeamStatistics.getTeamStatisticsFromJsonObject(jsonObject.getJSONObject("api").getJSONObject(dataFetchType.getFetchType()));
+            Team team = teamsRepository.findById(Integer.parseInt(param)).get();
+            teamStatistics.setTeam(team);
+            teamStatisticsRepository.save(teamStatistics);
         }
+
+        log.log(Level.INFO,"Fetch of data *" + dataFetchType.getFetchType() + "* finished");
+
     }
 
     private String prepareUrl(DataFetchType dataFetchType, String param) {
@@ -213,8 +204,9 @@ public class JsonFetchService {
             } else {
                 throw new IOException("Response code not 200");
             }
+
         } catch (IOException e) {
-            logger.log(Level.SEVERE,"Could not fetch JSON Object, " + e.getMessage());
+            log.log(Level.SEVERE,"Could not fetch JSON Object, " + e.getMessage());
             return null;
         }
     }
