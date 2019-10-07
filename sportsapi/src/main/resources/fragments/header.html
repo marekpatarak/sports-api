@@ -31,6 +31,9 @@
                 <li sec:authorize="!isAuthenticated()" class="nav-item active">
                     <a class="nav-link" href="/login"> Login </a>
                 </li>
+                <li sec:authorize="!isAuthenticated()" class="nav-item active">
+                    <a class="nav-link" href="/user/registration"> Register </a>
+                </li>
             </ul>
         </div>
         <div sec:authorize="isAuthenticated()" class="collapse navbar-collapse" countryId="navbarNav">
