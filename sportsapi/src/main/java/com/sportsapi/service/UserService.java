@@ -5,6 +5,8 @@ import com.sportsapi.auth.registration.UserDto;
 import com.sportsapi.entity.User;
 import com.sportsapi.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,9 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Transactional
     @Override
@@ -27,7 +32,7 @@ public class UserService implements IUserService {
         User user = new User();
         user.setFirstName(accountDto.getFirstName());
         user.setLastName(accountDto.getLastName());
-        user.setPassword(accountDto.getPassword());
+        user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
         return repository.save(user);       }
 
