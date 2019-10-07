@@ -2,6 +2,7 @@ package com.sportsapi.auth;
 
 import com.sportsapi.entity.User;
 import com.sportsapi.repository.UserRepository;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.sql.DataSource;
 import java.util.List;
 
 @EnableWebSecurity
@@ -23,14 +25,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    HikariDataSource dataSource;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        List<User> userList = (List<User>)userRepository.findAll();
-        InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> managerConfigurer = auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder);
-
-        userList.stream().forEach(x -> managerConfigurer.withUser(x.getEmail()).password(x.getPassword()).roles("USER"));
+    auth.jdbcAuthentication().dataSource(dataSource)
+            .usersByUsernameQuery("select email, password, enabled from user where email=?")
+            .authoritiesByUsernameQuery("select username, role from authority where username=?")
+            .passwordEncoder(passwordEncoder);
 
     }
 
@@ -43,9 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/admin").hasRole("USER")
+                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/teams/statistics/**").hasAnyRole("ADMIN","USER")
                 .and().formLogin()
-                .and().logout().logoutSuccessUrl("/login").permitAll()
+                .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().csrf().disable();
     }
 }

@@ -34,6 +34,7 @@ public class UserService implements IUserService {
         user.setLastName(accountDto.getLastName());
         user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
         user.setEmail(accountDto.getEmail());
+        user.setEnabled(true);
         return repository.save(user);       }
 
     private boolean emailExist(String email) {
