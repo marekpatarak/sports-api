@@ -54,26 +54,4 @@ public class League {
                 '}';
     }
 
-    public static League getLeagueFromJsonObject(JSONObject jsonObject) {
-        if(jsonObject != null) {
-            Country country = new Country();
-            country.setCountryName(!jsonObject.get("country").equals(null) ? (String)jsonObject.get("country") : null);
-            country.setCode(!jsonObject.get("country_code").equals(null) ? (String)jsonObject.get("country_code") : null);
-
-            League league = new League();
-            league.setLeagueId(!jsonObject.get("league_id").equals(null) ? (Integer)jsonObject.get("league_id") : null);
-            league.setName(jsonObject.get("name").equals(null) ? (String)jsonObject.get("name") : null);
-            league.setSeason(!jsonObject.get("season").equals(null) ? (Integer)jsonObject.get("season") : null);
-            league.setSeasonStart(!jsonObject.get("season_start").equals(null) ? (String)jsonObject.get("season_start") : null);
-            league.setSeasonEnd(!jsonObject.get("season_end").equals(null) ? (String)jsonObject.get("season_end") : null);
-            league.setLogo(!jsonObject.get("logo").equals(null) ? (String)jsonObject.get("logo") : null);
-            league.setStandings((Integer) jsonObject.get("standings") == 1 ? true : false);
-            league.setIsCurrent((Integer) jsonObject.get("is_current") == 1 ? true : false);
-            league.setCountry(country);
-
-            return league;
-        }
-        return null;
-    }
-
 }

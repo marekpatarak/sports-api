@@ -36,17 +36,5 @@ public class Country {
                 '}';
     }
 
-    public static Country getCountryFromJsonObject(JSONObject jsonObject) {
-        if(jsonObject != null) {
-            Country country = new Country();
-
-            country.setCountryName(!jsonObject.get("country").equals(null) ? (String)jsonObject.get("country") : null);
-            country.setCode(!jsonObject.get("code").equals(null) ? (String)jsonObject.get("code") : null);
-            country.setFlag(!jsonObject.get("flag").equals(null) ? (String)jsonObject.get("flag") : null);
-
-            return country;
-        }
-        return null;
-    }
 }
 

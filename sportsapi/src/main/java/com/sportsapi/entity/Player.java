@@ -54,25 +54,4 @@ public class Player {
                 '}';
     }
 
-    public static Player getPlayerFromJsonObject(JSONObject jsonObject) {
-        if(jsonObject != null) {
-            Player player = new Player();
-            player.setPlayerId(!jsonObject.get("player_id").equals(null) ? (Integer)jsonObject.get("player_id") : null);
-            player.setFirstName(!jsonObject.get("firstname").equals(null) ? (String)jsonObject.get("firstname") : null);
-            player.setLastName(!jsonObject.get("lastname").equals(null) ? (String)jsonObject.get("lastname") : null);
-            player.setNumber(!jsonObject.get("number").equals(null) ? (Integer)jsonObject.get("number") : null);
-            player.setPosition(!jsonObject.get("position").equals(null) ? (String)jsonObject.get("position") : null);
-            player.setAge(!jsonObject.get("age").equals(null) ? (Integer)jsonObject.get("age") : null);
-            player.setBirthDate(!jsonObject.get("birth_date").equals(null) ? (String)jsonObject.get("birth_date") : null);
-            player.setBirthPlace(!jsonObject.get("birth_place").equals(null) ? (String)jsonObject.get("birth_place") : null);
-            player.setBirthCountry(!jsonObject.get("birth_country").equals(null) ? (String)jsonObject.get("birth_country") : null);
-            player.setNationality(!jsonObject.get("nationality").equals(null) ? (String)jsonObject.get("nationality") : null);
-            player.setHeight(!jsonObject.get("height").equals(null) ? (String)jsonObject.get("height") : null);
-            player.setWeight(!jsonObject.get("weight").equals(null) ? (String)jsonObject.get("weight") : null);
-
-            return player;
-        }
-        return null;
-    }
-
 }

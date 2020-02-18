@@ -1,8 +1,12 @@
 package com.sportsapi.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.sportsapi.JsonObjectMapper;
 import com.sportsapi.control.DataFetchType;
 import com.sportsapi.entity.*;
 import com.sportsapi.repository.*;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +24,7 @@ import java.util.logging.Logger;
 
 @Service
 @Log
+@RequiredArgsConstructor
 public class JsonFetchService {
 
     @Value("${RAPID_API_URL_PREFIX}")
@@ -40,23 +45,19 @@ public class JsonFetchService {
     private final String RAPID_API_HOST_HEADER_KEY = "x-rapidapi-host";
     private final String RAPID_API_KEY_HEADER_KEY = "x-rapidapi-key";
 
-    @Autowired
-    private CountryRepository countryRepository;
+    private final CountryRepository countryRepository;
 
-    @Autowired
-    private LeagueRepository leagueRepository;
+    private final LeagueRepository leagueRepository;
 
-    @Autowired
-    private TeamsRepository teamsRepository;
+    private final TeamsRepository teamsRepository;
 
-    @Autowired
-    private TeamStatisticsRepository teamStatisticsRepository;
+    private final TeamStatisticsRepository teamStatisticsRepository;
 
-    @Autowired
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
-    @Autowired
-    private PlayerStatisticsRepository playerStatisticsRepository;
+    private final PlayerStatisticsRepository playerStatisticsRepository;
+
+    private final JsonObjectMapper jsonObjectMapper;
 
     public void toggleJsonFetchServiceEnabled(){
         if (Boolean.valueOf(jsonFetchServiceEnabled)) {
@@ -88,13 +89,13 @@ public class JsonFetchService {
                 switch (dataFetchType) {
 
                     case COUNTRIES:
-                        Country country = Country.getCountryFromJsonObject(entityObject);
+                        Country country = jsonObjectMapper.getCountryFromJsonObject(entityObject);
                         countryRepository.save(country);
                         log.log(Level.INFO, "Country " + country.getCountryName() + " saved");
                         break;
 
                     case LEAGUES:
-                        League league = League.getLeagueFromJsonObject(entityObject);
+                        League league = jsonObjectMapper.getLeagueFromJsonObject(entityObject);
                         Country leagueCountry = countryRepository.findCountryByCountryNameEquals(league.getCountry().getCountryName());
 
                         if (leagueCountry != null) {
@@ -108,7 +109,7 @@ public class JsonFetchService {
                         break;
 
                     case TEAMS:
-                        Team team = Team.getTeamFromJsonObject(entityObject);
+                        Team team = jsonObjectMapper.getTeamFromJsonObject(entityObject);
                         League teamLeague = leagueRepository.findById(Integer.parseInt(param)).get();
 
                         if (teamLeague != null) {
@@ -124,7 +125,7 @@ public class JsonFetchService {
 
                     case PLAYERS:
                         Team playerTeam = teamsRepository.findById(Integer.parseInt(param)).get();
-                        Player player = Player.getPlayerFromJsonObject(entityObject);
+                        Player player = jsonObjectMapper.getPlayerFromJsonObject(entityObject);
 
                         if (playerTeam != null) {
                             player.setTeam(playerTeam);
@@ -136,7 +137,7 @@ public class JsonFetchService {
                     case PLAYERSTATISTICS:
                         Player player1 = playerRepository.findById(Integer.parseInt(param)).get();
                         if (player1.getTeam().getLeague().getName().equals((String)entityObject.get("league"))) {
-                            PlayerStatistics playerStatistics = PlayerStatistics.getPlayerStatisticsFromJsonObject(entityObject);
+                            PlayerStatistics playerStatistics = jsonObjectMapper.getPlayerStatisticsFromJsonObject(entityObject);
                             playerStatistics.setPlayer(player1);
                             playerStatisticsRepository.save(playerStatistics);
                         }
@@ -146,7 +147,7 @@ public class JsonFetchService {
 
             }
         } else {
-            TeamStatistics teamStatistics = TeamStatistics.getTeamStatisticsFromJsonObject(jsonObject.getJSONObject("api").getJSONObject(dataFetchType.getFetchType()));
+            TeamStatistics teamStatistics = jsonObjectMapper.getTeamStatisticsFromJsonObject(jsonObject.getJSONObject("api").getJSONObject(dataFetchType.getFetchType()));
             Team team = teamsRepository.findById(Integer.parseInt(param)).get();
             teamStatistics.setTeam(team);
             teamStatisticsRepository.save(teamStatistics);
@@ -210,5 +211,7 @@ public class JsonFetchService {
             return null;
         }
     }
+
+
 }
 

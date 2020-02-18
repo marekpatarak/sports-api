@@ -5,6 +5,7 @@ import com.sportsapi.entity.League;
 import com.sportsapi.entity.Player;
 import com.sportsapi.entity.Team;
 import com.sportsapi.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +16,18 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 @Service
+@RequiredArgsConstructor
 public class ViewService {
 
-    @Autowired
-    private CountryRepository countryRepository;
+    private final CountryRepository countryRepository;
 
-    @Autowired
-    private LeagueRepository leagueRepository;
+    private final LeagueRepository leagueRepository;
 
-    @Autowired
-    private TeamsRepository teamsRepository;
+    private final TeamsRepository teamsRepository;
 
-    @Autowired
-    private TeamStatisticsRepository teamStatisticsRepository;
+    private final TeamStatisticsRepository teamStatisticsRepository;
 
-    @Autowired
-    private PlayerRepository playersRepository;
+    private final PlayerRepository playersRepository;
 
     private static Logger logger = Logger.getLogger(ViewService.class.getCanonicalName());
 
